@@ -5,22 +5,30 @@ A small project I made in response to my sudden obsession with command line game
 Dart
 
 ## Getting started
-Install required packages with ```bash
+Install required packages with
+```bash
 dart pub get
 ```
 
-## Compile with ```bash
+## Compile with
+```bash
 dart compile jit-snapshot bin/tetris.dart -o dist/tetris.jit
-``` or ```bash
+```
+or 
+```bash
 dart compile aot-snapshot bin/tetris.dart -o dist/tetris.aot
 ```
 
 ## Run with
 ```bash
 dart run
-``` or ```bash
+```
+or
+```bash
 dart run dist/tetris.jit
-``` or ```bash
+```
+or
+```bash
 dartaotruntime dist/tetris.aot
 ```
 
