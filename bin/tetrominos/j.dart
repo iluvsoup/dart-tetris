@@ -1,4 +1,4 @@
-class OTetromino {
+class JTetromino {
   final rotations = {
     [
       [-1, 0],
