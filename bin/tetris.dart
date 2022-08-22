@@ -15,6 +15,16 @@ int score = 0;
 
 Timer? drawEvent;
 
+const colors = <String, Color>{
+  'i': Color.LIGHT_CYAN,
+  'o': Color.YELLOW,
+  't': Color.MAGENTA,
+  'z': Color.RED,
+  'l': Color.DARK_BLUE,
+  's': Color.LIME,
+  'j': Color.GOLD,
+};
+
 const controls = [
   'up',
   'down',

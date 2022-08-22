@@ -1,5 +1,5 @@
 class TTetromino {
-  final List<List<List<int>>> rotations = [
+  final rotations = [
     [
       [-1, 0],
       [0, 0],
