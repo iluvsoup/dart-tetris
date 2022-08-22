@@ -9,6 +9,8 @@ int gridSizeY = 20;
 
 int score = 0;
 
+Timer? drawEvent;
+
 const controls = [
   'up',
   'down',
@@ -25,5 +27,55 @@ const controls = [
 ];
 
 void main() {
-  // nvm i dont feel like working on this rn
+  Console.init();
+  Keyboard.init();
+
+  Keyboard.echoUnhandledKeys = false;
+  Console.hideCursor();
+
+  Keyboard.bindKeys(controls).listen((key) {
+    handleInput(key);
+  });
+}
+
+void clear() {
+  if (Platform.isWindows) {
+    stdout.write(
+      Process.runSync("cls", [], runInShell: true).stdout,
+    );
+  } else {
+    stdout.write(
+      Process.runSync("clear", [], runInShell: true).stdout,
+    );
+  }
+}
+
+void gameOver() {
+  drawEvent!.cancel();
+
+  Console.showCursor();
+  print('Game over!');
+
+  exit(0);
+}
+
+void victory() {
+  drawEvent!.cancel();
+
+  Console.showCursor();
+  print('You win!');
+
+  exit(0);
+}
+
+void handleInput(String key) {
+  if (key == '') {
+    if (drawEvent != null) {
+      drawEvent!.cancel();
+    }
+
+    clear();
+    Console.showCursor();
+    exit(0);
+  }
 }
