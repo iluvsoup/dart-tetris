@@ -1,4 +1,5 @@
 import 't.dart';
+import 'o.dart';
 
 // I really don't want to use classes for this
 // dut dart is so stupid and you're kinda forced to
@@ -8,4 +9,5 @@ import 't.dart';
 
 class Tetrominos {
   final t = TTetromino();
+  final o = OTetromino();
 }
