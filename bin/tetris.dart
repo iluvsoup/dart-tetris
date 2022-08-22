@@ -4,6 +4,10 @@ import 'dart:math';
 
 import 'package:console/console.dart';
 
+import 'tetrominos/tetrominos.dart';
+
+final tetrominos = Tetrominos();
+
 int gridSizeX = 20;
 int gridSizeY = 20;
 
