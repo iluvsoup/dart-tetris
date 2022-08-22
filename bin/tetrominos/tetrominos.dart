@@ -1,6 +1,7 @@
 import 't.dart';
 import 'o.dart';
 import 'l.dart';
+import 'j.dart';
 
 // I really don't want to use classes for this
 // dut dart is so stupid and you're kinda forced to
@@ -11,5 +12,6 @@ import 'l.dart';
 class Tetrominos {
   final t = TTetromino();
   final o = OTetromino();
-  final j = LTetromino();
+  final l = LTetromino();
+  final j = JTetromino();
 }
