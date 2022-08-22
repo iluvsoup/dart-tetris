@@ -18,7 +18,8 @@ const controls = [
   'a',
   's',
   'd',
-  'f',
+  'q',
+  'e',
   ' ',
   '', // escape
 ];
