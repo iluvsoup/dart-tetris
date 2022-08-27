@@ -41,7 +41,7 @@ s: respective tetromino
 l: respective tetromino
 */
 
-const bool unicodeTiles = true;
+const bool unicodeTiles = false;
 
 int score = 0;
 
@@ -142,31 +142,32 @@ void draw() {
   }
 
   // drawing the canvas
+  var pen = TextPen();
+
   for (int y = 0; y < gridSizeY; y++) {
     String line = '';
 
     for (int x = 0; x < gridSizeX; x++) {
       var pixel = canvas[y]![x];
-      String character;
 
       if (unicodeTiles) {
         if (pixel != 0) {
-          character = unicodeCharacters[pixel]!;
+          pen.text(unicodeCharacters[pixel]!);
         } else {
-          character = '  ';
+          pen.text('  ');
         }
       } else {
         if (pixel != 0) {
-          character = '# ';
+          pen.setColor(colors[pieceType]!);
+          pen.text('# ');
         } else {
-          character = '  ';
+          pen.text('  ');
         }
       }
-
-      line += character;
     }
 
-    print(line);
+    pen.print();
+    pen.reset();
   }
 }
 
