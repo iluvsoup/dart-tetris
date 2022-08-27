@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'dart:async';
-import 'dart:math';
-// import 'dart:math';
 
 import 'package:console/console.dart';
 
@@ -23,8 +21,13 @@ final tetrominos = <String, List<List<List<int>>>>{
   'l': LTetromino().rotations,
 };
 
-int gridSizeX = 10;
-int gridSizeY = 20;
+const int gridSizeX = 10;
+const int gridSizeY = 20;
+
+const bool unicodeTiles = true;
+
+const int gravityInterval = 500; // milliseconds
+const int softDropInterval = 250;
 
 Map<int, Map<int, dynamic>> grid = generateGrid();
 
@@ -41,8 +44,6 @@ s: respective tetromino
 l: respective tetromino
 */
 
-const bool unicodeTiles = false;
-
 int score = 0;
 
 int pieceX = 4;
@@ -53,9 +54,6 @@ int pieceRotation = 0;
 String pieceType = 't';
 
 bool isSoftDropping = false;
-
-int gravityInterval = 500; // milliseconds
-int softDropInterval = 250;
 
 Timer? gravityEvent;
 
@@ -144,8 +142,22 @@ void draw() {
   // drawing the canvas
   var pen = TextPen();
 
+  if (unicodeTiles) {
+    print('⬛' * (gridSizeX + 2));
+  } else {
+    pen.setColor(Color.GRAY);
+    pen.text('# ' * (gridSizeX + 2));
+    pen.print();
+    pen.reset();
+  }
+
   for (int y = 0; y < gridSizeY; y++) {
-    String line = '';
+    if (unicodeTiles) {
+      pen.text('⬛');
+    } else {
+      pen.setColor(Color.GRAY);
+      pen.text('# ');
+    }
 
     for (int x = 0; x < gridSizeX; x++) {
       var pixel = canvas[y]![x];
@@ -166,6 +178,22 @@ void draw() {
       }
     }
 
+    if (unicodeTiles) {
+      pen.text('⬛');
+    } else {
+      pen.setColor(Color.GRAY);
+      pen.text('# ');
+    }
+
+    pen.print();
+    pen.reset();
+  }
+
+  if (unicodeTiles) {
+    print('⬛' * (gridSizeX + 2));
+  } else {
+    pen.setColor(Color.GRAY);
+    pen.text('# ' * (gridSizeX + 2));
     pen.print();
     pen.reset();
   }
