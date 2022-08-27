@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:math';
 // import 'dart:math';
 
 import 'package:console/console.dart';
@@ -25,7 +26,7 @@ final tetrominos = <String, List<List<List<int>>>>{
 int gridSizeX = 10;
 int gridSizeY = 20;
 
-final grid = generateGrid();
+Map<int, Map<int, dynamic>> grid = generateGrid();
 
 /*
 grid representation:
@@ -40,15 +41,16 @@ s: respective tetromino
 l: respective tetromino
 */
 
-bool unicodeTiles = false;
+const bool unicodeTiles = true;
 
 int score = 0;
 
-int pieceX = 0;
+int pieceX = 4;
 int pieceY = 0;
 int pieceRotation = 0;
 
-late String pieceType;
+// late String pieceType = 't';
+String pieceType = 't';
 
 bool isSoftDropping = false;
 
@@ -57,7 +59,7 @@ int softDropInterval = 250;
 
 Timer? gravityEvent;
 
-List<List<dynamic>> canvas = [];
+Map<int, Map<int, dynamic>> canvas = {};
 
 const colors = <String, Color>{
   'i': Color.LIGHT_CYAN,
@@ -101,6 +103,8 @@ void main() {
   Keyboard.echoUnhandledKeys = false;
   Console.hideCursor();
 
+  draw();
+
   gravityEvent = Timer.periodic(
     Duration(milliseconds: softDropInterval),
     (timer) => gravity,
@@ -111,13 +115,13 @@ void main() {
   });
 }
 
-List<List<dynamic>> generateGrid() {
-  List<List<dynamic>> tmp = [];
+Map<int, Map<int, dynamic>> generateGrid() {
+  Map<int, Map<int, dynamic>> tmp = {};
 
   for (int y = 0; y < gridSizeY; y++) {
-    tmp[y] = [];
+    tmp[y] = {};
     for (int x = 0; x < gridSizeX; x++) {
-      tmp[y][x] = 0;
+      tmp[y]![x] = 0;
     }
   }
 
@@ -126,9 +130,44 @@ List<List<dynamic>> generateGrid() {
 
 void draw() {
   clear();
-  canvas = grid;
 
+  // dirty way of cloning list by value
+  canvas = {...grid};
+
+  // overlaying canvas with the falling piece and the preview piece
   final piecePositions = tetrominos[pieceType]![pieceRotation];
+
+  for (var position in piecePositions) {
+    canvas[position.last + pieceY]![position.first + pieceX] = pieceType;
+  }
+
+  // drawing the canvas
+  for (int y = 0; y < gridSizeY; y++) {
+    String line = '';
+
+    for (int x = 0; x < gridSizeX; x++) {
+      var pixel = canvas[y]![x];
+      String character;
+
+      if (unicodeTiles) {
+        if (pixel != 0) {
+          character = unicodeCharacters[pixel]!;
+        } else {
+          character = '  ';
+        }
+      } else {
+        if (pixel != 0) {
+          character = '# ';
+        } else {
+          character = '  ';
+        }
+      }
+
+      line += character;
+    }
+
+    print(line);
+  }
 }
 
 void clear() {
