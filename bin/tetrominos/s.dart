@@ -1,5 +1,5 @@
 class STetromino {
-  final rotations = {
+  final rotations = [
     [
       [-1, 0],
       [0, 0],
@@ -24,5 +24,5 @@ class STetromino {
       [0, 0],
       [0, 1]
     ],
-  };
+  ];
 }

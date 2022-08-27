@@ -1,5 +1,5 @@
 class ITetromino {
-  final rotations = {
+  final rotations = [
     [
       [-1, -1],
       [0, -1],
@@ -24,5 +24,5 @@ class ITetromino {
       [0, 2],
       [0, 3]
     ],
-  };
+  ];
 }

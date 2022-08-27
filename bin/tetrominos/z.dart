@@ -1,5 +1,5 @@
 class ZTetromino {
-  final rotations = {
+  final rotations = [
     [
       [-1, -1],
       [0, -1],
@@ -24,5 +24,5 @@ class ZTetromino {
       [-1, 0],
       [-1, 1]
     ],
-  };
+  ];
 }

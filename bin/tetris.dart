@@ -4,9 +4,23 @@ import 'dart:async';
 
 import 'package:console/console.dart';
 
-import 'tetrominos/tetrominos.dart';
+import 'tetrominos/i.dart';
+import 'tetrominos/j.dart';
+import 'tetrominos/l.dart';
+import 'tetrominos/o.dart';
+import 'tetrominos/s.dart';
+import 'tetrominos/t.dart';
+import 'tetrominos/z.dart';
 
-final tetrominos = Tetrominos();
+final tetrominos = <String, List<List<List<int>>>>{
+  'i': ITetromino().rotations,
+  'o': OTetromino().rotations,
+  't': TTetromino().rotations,
+  'z': ZTetromino().rotations,
+  'j': JTetromino().rotations,
+  's': STetromino().rotations,
+  'l': LTetromino().rotations,
+};
 
 int gridSizeX = 10;
 int gridSizeY = 20;
@@ -26,16 +40,24 @@ s: respective tetromino
 l: respective tetromino
 */
 
+bool unicodeTiles = false;
+
 int score = 0;
 
 int pieceX = 0;
 int pieceY = 0;
 int pieceRotation = 0;
 
+late String pieceType;
+
+bool isSoftDropping = false;
+
 int gravityInterval = 500; // milliseconds
 int softDropInterval = 250;
 
 Timer? gravityEvent;
+
+List<List<dynamic>> canvas = [];
 
 const colors = <String, Color>{
   'i': Color.LIGHT_CYAN,
@@ -45,6 +67,16 @@ const colors = <String, Color>{
   'j': Color.DARK_BLUE,
   's': Color.LIME,
   'l': Color.GOLD,
+};
+
+const unicodeCharacters = <String, String>{
+  'i': '🟦',
+  'o': '🟨',
+  't': '🟪',
+  'z': '🟥',
+  'j': '🟫',
+  's': '🟩',
+  'l': '🟧',
 };
 
 const controls = [
@@ -92,6 +124,13 @@ List<List<dynamic>> generateGrid() {
   return tmp;
 }
 
+void draw() {
+  clear();
+  canvas = grid;
+
+  final piecePositions = tetrominos[pieceType]![pieceRotation];
+}
+
 void clear() {
   if (Platform.isWindows) {
     stdout.write(
@@ -104,7 +143,9 @@ void clear() {
   }
 }
 
-void gravity() {}
+void gravity() {
+  draw();
+}
 
 void gameOver() {
   gravityEvent!.cancel();

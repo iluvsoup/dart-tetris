@@ -1,5 +1,5 @@
 class LTetromino {
-  final rotations = {
+  final rotations = [
     [
       [-1, 0],
       [0, 0],
@@ -24,5 +24,5 @@ class LTetromino {
       [0, 1],
       [-1, -1]
     ],
-  };
+  ];
 }
