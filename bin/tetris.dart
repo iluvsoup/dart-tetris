@@ -46,18 +46,18 @@ l: respective tetromino
 
 int score = 0;
 
-int pieceX = 4;
-int pieceY = 0;
+int pieceX = 5;
+int pieceY = 3;
 int pieceRotation = 0;
 
-// late String pieceType = 't';
+// late String pieceType;
 String pieceType = 't';
 
 bool isSoftDropping = false;
 
 Timer? gravityEvent;
 
-Map<int, Map<int, dynamic>> canvas = {};
+Map canvas = {};
 
 const colors = <String, Color>{
   'i': Color.LIGHT_CYAN,
@@ -113,6 +113,20 @@ void main() {
   });
 }
 
+Map deepCloneMap(Map map) {
+  Map tmp = {};
+
+  map.forEach((k, v) {
+    if (v is Map) {
+      tmp[k] = deepCloneMap(v);
+    } else {
+      tmp[k] = v;
+    }
+  });
+
+  return tmp;
+}
+
 Map<int, Map<int, dynamic>> generateGrid() {
   Map<int, Map<int, dynamic>> tmp = {};
 
@@ -129,8 +143,7 @@ Map<int, Map<int, dynamic>> generateGrid() {
 void draw() {
   clear();
 
-  // dirty way of cloning list by value
-  canvas = {...grid};
+  canvas = deepCloneMap(grid);
 
   // overlaying canvas with the falling piece and the preview piece
   final piecePositions = tetrominos[pieceType]![pieceRotation];
@@ -233,8 +246,33 @@ void victory() {
   exit(0);
 }
 
+// 'up',
+// 'down',
+// 'left',
+// 'right',
+// 'w',
+// 'a',
+// 's',
+// 'd',
+// 'q',
+// 'e',
+// ' ',
+// '', // escape
+
 void handleInput(String key) {
-  if (key == '') {
+  if (key == 'left' || key == 'a') {
+    pieceX--;
+    draw();
+  } else if (key == 'right' || key == 'd') {
+    pieceX++;
+    draw();
+  } else if (key == 'q') {
+    pieceRotation = (pieceRotation - 1) % 4;
+    draw();
+  } else if (key == 'e') {
+    pieceRotation = (pieceRotation + 1) % 4;
+    draw();
+  } else if (key == '') {
     if (gravityEvent != null) {
       gravityEvent!.cancel();
     }
