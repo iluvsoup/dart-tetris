@@ -27,7 +27,7 @@ const int gridSizeY = 20;
 const bool unicodeTiles = true;
 
 const int gravityInterval = 500; // milliseconds
-const int softDropInterval = 100;
+const int softDropInterval = 50;
 
 const double gravityFrames = (gravityInterval / softDropInterval);
 
@@ -58,6 +58,7 @@ int pieceRotation = 0;
 String pieceType = 't';
 
 bool isSoftDropping = false;
+// bool wasSoftDropping = false;
 
 late Timer gravityEvent;
 
@@ -217,6 +218,10 @@ void gravity() {
   if (isSoftDropping || (!isSoftDropping && frame % gravityFrames == 0)) {
     pieceY++;
     draw();
+
+    if (frame % gravityFrames == 0) {
+      isSoftDropping = false;
+    }
   }
 
   frame++;
@@ -243,7 +248,7 @@ void handleInput(String key) {
   } else if (key == 'z') {
     pieceRotation = (pieceRotation + 1) % numberOfPieceRotations;
   } else if (key == 'down' || key == 's') {
-    // soft drop
+    isSoftDropping = true;
   } else if (key == ' ') {
     // hard drop
   } else if (key == '') {
