@@ -155,25 +155,30 @@ void draw() {
   // drawing the canvas
   var pen = TextPen();
 
+  pen.setColor(Color.GRAY);
+
   if (unicodeTiles) {
-    print('⬛' * (gridSizeX + 2));
+    pen.text('⬛' * (gridSizeX + 2));
   } else {
-    pen.setColor(Color.GRAY);
     pen.text('# ' * (gridSizeX + 2));
-    pen.print();
-    pen.reset();
   }
 
+  pen.print();
+  pen.reset();
+
   for (int y = 0; y < gridSizeY; y++) {
+    pen.setColor(Color.GRAY);
+
     if (unicodeTiles) {
       pen.text('⬛');
     } else {
-      pen.setColor(Color.GRAY);
       pen.text('# ');
     }
 
     for (int x = 0; x < gridSizeX; x++) {
       var pixel = canvas[y]![x];
+
+      pen.setColor(colors[pieceType]!);
 
       if (unicodeTiles) {
         if (pixel != 0) {
@@ -183,7 +188,6 @@ void draw() {
         }
       } else {
         if (pixel != 0) {
-          pen.setColor(colors[pieceType]!);
           pen.text('# ');
         } else {
           pen.text('  ');
@@ -191,10 +195,11 @@ void draw() {
       }
     }
 
+    pen.setColor(Color.GRAY);
+
     if (unicodeTiles) {
       pen.text('⬛');
     } else {
-      pen.setColor(Color.GRAY);
       pen.text('# ');
     }
 
@@ -202,14 +207,16 @@ void draw() {
     pen.reset();
   }
 
+  pen.setColor(Color.GRAY);
+
   if (unicodeTiles) {
-    print('⬛' * (gridSizeX + 2));
+    pen.text('⬛' * (gridSizeX + 2));
   } else {
-    pen.setColor(Color.GRAY);
     pen.text('# ' * (gridSizeX + 2));
-    pen.print();
-    pen.reset();
   }
+
+  pen.print();
+  pen.reset();
 }
 
 void clear() {
