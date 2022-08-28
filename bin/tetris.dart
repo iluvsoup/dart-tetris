@@ -27,7 +27,11 @@ const int gridSizeY = 20;
 const bool unicodeTiles = true;
 
 const int gravityInterval = 500; // milliseconds
-const int softDropInterval = 250;
+const int softDropInterval = 100;
+
+const double gravityFrames = (gravityInterval / softDropInterval);
+
+int frame = 0;
 
 Map<int, Map<int, dynamic>> grid = generateGrid();
 
@@ -55,10 +59,7 @@ String pieceType = 't';
 
 bool isSoftDropping = false;
 
-Timer gravityEvent = Timer.periodic(
-  Duration(milliseconds: softDropInterval),
-  (timer) => gravity,
-);
+late Timer gravityEvent;
 
 Map canvas = {};
 
@@ -82,7 +83,7 @@ const unicodeCharacters = <String, String>{
   'l': '🟧',
 };
 
-const controls = ['up', 'down', 'left', 'right', 'z', 'w', 'a', 's', ' ', ''];
+const controls = ['up', 'down', 'left', 'right', 'z', 'w', 'a', 's', 'd', ' ', ''];
 
 void main() {
   Console.init();
@@ -92,6 +93,11 @@ void main() {
   Console.hideCursor();
 
   draw();
+
+  gravityEvent = Timer.periodic(
+    Duration(milliseconds: softDropInterval),
+    (timer) => gravity(),
+  );
 
   Keyboard.bindKeys(controls).listen((key) {
     handleInput(key);
@@ -158,7 +164,7 @@ void draw() {
         if (pixel != 0) {
           pen.text(unicodeCharacters[pixel]!);
         } else {
-          pen.text('⬛');
+          pen.text('  ');
         }
       } else {
         if (pixel != 0) {
@@ -191,6 +197,8 @@ void draw() {
 
   pen.print();
   pen.reset();
+
+  print('\nScore: $score');
 }
 
 void clear() {
@@ -206,7 +214,12 @@ void clear() {
 }
 
 void gravity() {
-  draw();
+  if (isSoftDropping || (!isSoftDropping && frame % gravityFrames == 0)) {
+    pieceY++;
+    draw();
+  }
+
+  frame++;
 }
 
 void gameOver() {
@@ -214,15 +227,6 @@ void gameOver() {
 
   Console.showCursor();
   print('Game over!');
-
-  exit(0);
-}
-
-void victory() {
-  gravityEvent.cancel();
-
-  Console.showCursor();
-  print('You win!');
 
   exit(0);
 }
@@ -235,9 +239,9 @@ void handleInput(String key) {
   } else if (key == 'right' || key == 'd') {
     pieceX++;
   } else if (key == 'up' || key == 'w') {
-    pieceRotation = (pieceRotation + 1) % numberOfPieceRotations;
-  } else if (key == 'z') {
     pieceRotation = (pieceRotation - 1) % numberOfPieceRotations;
+  } else if (key == 'z') {
+    pieceRotation = (pieceRotation + 1) % numberOfPieceRotations;
   } else if (key == 'down' || key == 's') {
     // soft drop
   } else if (key == ' ') {
