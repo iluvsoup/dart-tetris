@@ -51,7 +51,7 @@ int pieceY = 3;
 int pieceRotation = 0;
 
 // late String pieceType;
-String pieceType = 't';
+String pieceType = 'o';
 
 bool isSoftDropping = false;
 
@@ -280,9 +280,7 @@ void handleInput(String key) {
     pieceRotation = (pieceRotation + 1) % 4;
     draw();
   } else if (key == '') {
-    if (gravityEvent != null) {
-      gravityEvent!.cancel();
-    }
+    gravityEvent!.cancel();
 
     clear();
     Console.showCursor();
