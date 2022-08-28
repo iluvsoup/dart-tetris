@@ -51,7 +51,7 @@ int pieceY = 2;
 int pieceRotation = 0;
 
 // late String pieceType;
-String pieceType = 'z';
+String pieceType = 't';
 
 bool isSoftDropping = false;
 
@@ -82,20 +82,7 @@ const unicodeCharacters = <String, String>{
   'l': '🟧',
 };
 
-const controls = [
-  'up',
-  'down',
-  'left',
-  'right',
-  'w',
-  'a',
-  's',
-  'd',
-  'q',
-  'e',
-  ' ',
-  '', // escape
-];
+const controls = ['up', 'down', 'left', 'right', 'z', 'w', 'a', 's', ' ', ''];
 
 void main() {
   Console.init();
@@ -171,7 +158,7 @@ void draw() {
         if (pixel != 0) {
           pen.text(unicodeCharacters[pixel]!);
         } else {
-          pen.text('  ');
+          pen.text('⬛');
         }
       } else {
         if (pixel != 0) {
@@ -240,34 +227,21 @@ void victory() {
   exit(0);
 }
 
-// 'up',
-// 'down',
-// 'left',
-// 'right',
-// 'w',
-// 'a',
-// 's',
-// 'd',
-// 'q',
-// 'e',
-// ' ',
-// '', // escape
-
 void handleInput(String key) {
   int numberOfPieceRotations = tetrominos[pieceType]!.length;
 
   if (key == 'left' || key == 'a') {
     pieceX--;
-    draw();
   } else if (key == 'right' || key == 'd') {
     pieceX++;
-    draw();
-  } else if (key == 'q') {
-    pieceRotation = (pieceRotation - 1) % numberOfPieceRotations;
-    draw();
-  } else if (key == 'e') {
+  } else if (key == 'up' || key == 'w') {
     pieceRotation = (pieceRotation + 1) % numberOfPieceRotations;
-    draw();
+  } else if (key == 'z') {
+    pieceRotation = (pieceRotation - 1) % numberOfPieceRotations;
+  } else if (key == 'down' || key == 's') {
+    // soft drop
+  } else if (key == ' ') {
+    // hard drop
   } else if (key == '') {
     gravityEvent.cancel();
 
@@ -275,4 +249,6 @@ void handleInput(String key) {
     Console.showCursor();
     exit(0);
   }
+
+  draw();
 }
