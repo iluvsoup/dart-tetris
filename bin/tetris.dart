@@ -46,12 +46,12 @@ l: respective tetromino
 
 int score = 0;
 
-int pieceX = 5;
-int pieceY = 3;
+int pieceX = 4;
+int pieceY = 2;
 int pieceRotation = 0;
 
 // late String pieceType;
-String pieceType = 'o';
+String pieceType = 'z';
 
 bool isSoftDropping = false;
 
@@ -152,17 +152,6 @@ void draw() {
 
   // drawing the canvas
   var pen = TextPen();
-
-  pen.setColor(Color.GRAY);
-
-  if (unicodeTiles) {
-    pen.text('⬛' * (gridSizeX + 2));
-  } else {
-    pen.text('# ' * (gridSizeX + 2));
-  }
-
-  pen.print();
-  pen.reset();
 
   for (int y = 0; y < gridSizeY; y++) {
     pen.setColor(Color.GRAY);
@@ -265,6 +254,8 @@ void victory() {
 // '', // escape
 
 void handleInput(String key) {
+  int numberOfPieceRotations = tetrominos[pieceType]!.length;
+
   if (key == 'left' || key == 'a') {
     pieceX--;
     draw();
@@ -272,10 +263,10 @@ void handleInput(String key) {
     pieceX++;
     draw();
   } else if (key == 'q') {
-    pieceRotation = (pieceRotation - 1) % 4;
+    pieceRotation = (pieceRotation - 1) % numberOfPieceRotations;
     draw();
   } else if (key == 'e') {
-    pieceRotation = (pieceRotation + 1) % 4;
+    pieceRotation = (pieceRotation + 1) % numberOfPieceRotations;
     draw();
   } else if (key == '') {
     gravityEvent.cancel();
