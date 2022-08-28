@@ -55,7 +55,10 @@ String pieceType = 'o';
 
 bool isSoftDropping = false;
 
-Timer? gravityEvent;
+Timer gravityEvent = Timer.periodic(
+  Duration(milliseconds: softDropInterval),
+  (timer) => gravity,
+);
 
 Map canvas = {};
 
@@ -102,11 +105,6 @@ void main() {
   Console.hideCursor();
 
   draw();
-
-  gravityEvent = Timer.periodic(
-    Duration(milliseconds: softDropInterval),
-    (timer) => gravity,
-  );
 
   Keyboard.bindKeys(controls).listen((key) {
     handleInput(key);
@@ -236,7 +234,7 @@ void gravity() {
 }
 
 void gameOver() {
-  gravityEvent!.cancel();
+  gravityEvent.cancel();
 
   Console.showCursor();
   print('Game over!');
@@ -245,7 +243,7 @@ void gameOver() {
 }
 
 void victory() {
-  gravityEvent!.cancel();
+  gravityEvent.cancel();
 
   Console.showCursor();
   print('You win!');
@@ -280,7 +278,7 @@ void handleInput(String key) {
     pieceRotation = (pieceRotation + 1) % 4;
     draw();
   } else if (key == '') {
-    gravityEvent!.cancel();
+    gravityEvent.cancel();
 
     clear();
     Console.showCursor();
