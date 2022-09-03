@@ -55,7 +55,7 @@ int pieceY = 2;
 int pieceRotation = 0;
 
 // late String pieceType;
-String pieceType = 't';
+String pieceType = 'i';
 
 bool isSoftDropping = false;
 // bool wasSoftDropping = false;
@@ -216,7 +216,7 @@ void clear() {
 
 void gravity() {
   if (isSoftDropping || (!isSoftDropping && frame % gravityFrames == 0)) {
-    pieceY++;
+    // pieceY++;
     draw();
 
     if (frame % gravityFrames == 0) {
@@ -244,9 +244,9 @@ void handleInput(String key) {
   } else if (key == 'right' || key == 'd') {
     pieceX++;
   } else if (key == 'up' || key == 'w') {
-    pieceRotation = (pieceRotation - 1) % numberOfPieceRotations;
-  } else if (key == 'z') {
     pieceRotation = (pieceRotation + 1) % numberOfPieceRotations;
+  } else if (key == 'z') {
+    pieceRotation = (pieceRotation - 1) % numberOfPieceRotations;
   } else if (key == 'down' || key == 's') {
     isSoftDropping = true;
   } else if (key == ' ') {
