@@ -36,19 +36,6 @@ int frame = 0;
 
 Map<int, Map<int, dynamic>> grid = generateGrid();
 
-/*
-grid representation:
-0 = empty
-
-i: respective tetromino
-o: respective tetromino
-t: respective tetromino
-z: respective tetromino
-j: respective tetromino
-s: respective tetromino
-l: respective tetromino
-*/
-
 int score = 0;
 
 int pieceX = 4;
