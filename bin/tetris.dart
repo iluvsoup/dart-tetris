@@ -52,17 +52,16 @@ l: respective tetromino
 int score = 0;
 
 int pieceX = 4;
-int pieceY = 2;
+int pieceY = -2;
 int pieceRotation = 0;
 
 Random rng = Random();
 
 // late String pieceType;
 List<String> pieceTypes = ['i', 'o', 't', 'z', 'j', 's', 'l'];
-String pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
+late String pieceType;
 
 bool isSoftDropping = false;
-// bool wasSoftDropping = false;
 
 late Timer gravityEvent;
 
@@ -105,6 +104,8 @@ void main() {
   Keyboard.bindKeys(controls).listen((key) {
     handleInput(key);
   });
+
+  pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
 }
 
 Map deepCloneMap(Map map) {
@@ -141,9 +142,9 @@ bool isPieceColliding(String type, int rotation, int x, int y) {
     int realX = position.first + x;
     int realY = position.last + y;
 
-    if (realX < 0 || realX >= gridSizeX || realY < 0 || realY >= gridSizeY) return true;
+    if (realX < 0 || realX >= gridSizeX || realY >= gridSizeY) return true;
 
-    if (grid[realY]![realX] != 0) return true;
+    if (grid[realY] != null && grid[realY]![realX] != 0) return true;
   }
 
   return false;
@@ -168,7 +169,9 @@ void draw() {
   }
 
   for (var position in piecePositions) {
-    canvas[position.last + pieceY]![position.first + pieceX] = pieceType;
+    if (canvas[position.last + pieceY] != null) {
+      canvas[position.last + pieceY]![position.first + pieceX] = pieceType;
+    }
   }
 
   // drawing the canvas
@@ -249,6 +252,21 @@ void gravity() {
   if (isSoftDropping || (!isSoftDropping && frame % gravityFrames == 0)) {
     pieceY++;
     draw();
+
+    if (isPieceColliding(pieceType, pieceRotation, pieceX, pieceY + 1)) {
+      // place piece
+      final piecePositions = tetrominos[pieceType]![pieceRotation];
+
+      for (var position in piecePositions) {
+        grid[position.last + pieceY]![position.first + pieceX] = pieceType;
+      }
+
+      pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
+
+      pieceY = -2;
+      pieceX = 4;
+      pieceRotation = 0;
+    }
 
     if (frame % gravityFrames == 0) {
       isSoftDropping = false;
