@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:math';
 
 import 'package:console/console.dart';
 
@@ -54,8 +55,11 @@ int pieceX = 4;
 int pieceY = 2;
 int pieceRotation = 0;
 
+Random rng = Random();
+
 // late String pieceType;
-String pieceType = 'i';
+List<String> pieceTypes = ['i', 'o', 't', 'z', 'j', 's', 'l'];
+String pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
 
 bool isSoftDropping = false;
 // bool wasSoftDropping = false;
@@ -132,6 +136,21 @@ Map<int, Map<int, dynamic>> generateGrid() {
   return tmp;
 }
 
+bool isPieceColliding(String type, int rotation, int x, int y) {
+  final positions = tetrominos[type]![rotation];
+
+  for (var position in positions) {
+    int realX = position.first + x;
+    int realY = position.last + y;
+
+    if (realX < 0 || realX >= gridSizeX || realY < 0 || realY >= gridSizeY) return true;
+
+    if (grid[realY]![realX] != 0) return true;
+  }
+
+  return false;
+}
+
 void draw() {
   clear();
 
@@ -139,6 +158,16 @@ void draw() {
 
   // overlaying canvas with the falling piece and the preview piece
   final piecePositions = tetrominos[pieceType]![pieceRotation];
+
+  for (int previewY = pieceY; previewY < gridSizeY; previewY++) {
+    if (isPieceColliding(pieceType, pieceRotation, pieceX, previewY + 1)) {
+      for (var position in piecePositions) {
+        canvas[position.last + previewY]![position.first + pieceX] = 1;
+      }
+
+      break;
+    }
+  }
 
   for (var position in piecePositions) {
     canvas[position.last + pieceY]![position.first + pieceX] = pieceType;
@@ -159,19 +188,23 @@ void draw() {
     for (int x = 0; x < gridSizeX; x++) {
       var pixel = canvas[y]![x];
 
-      pen.setColor(colors[pieceType]!);
-
-      if (unicodeTiles) {
-        if (pixel != 0) {
-          pen.text(unicodeCharacters[pixel]!);
-        } else {
+      if (pixel == 0 || pixel == 1) {
+        if (pixel == 0) {
           pen.text('  ');
+        } else {
+          pen.setColor(Color.LIGHT_GRAY);
+          if (unicodeTiles) {
+            pen.text('⬜');
+          } else {
+            pen.text('# ');
+          }
         }
       } else {
-        if (pixel != 0) {
-          pen.text('# ');
+        pen.setColor(colors[pixel]!);
+        if (unicodeTiles) {
+          pen.text(unicodeCharacters[pixel]!);
         } else {
-          pen.text('  ');
+          pen.text('# ');
         }
       }
     }
@@ -216,7 +249,7 @@ void clear() {
 
 void gravity() {
   if (isSoftDropping || (!isSoftDropping && frame % gravityFrames == 0)) {
-    // pieceY++;
+    pieceY++;
     draw();
 
     if (frame % gravityFrames == 0) {
