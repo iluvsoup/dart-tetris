@@ -44,7 +44,8 @@ int pieceRotation = 0;
 
 Random rng = Random();
 
-// late String pieceType;
+late Map<int, dynamic> emptyLine;
+
 List<String> pieceTypes = ['i', 'o', 't', 'z', 'j', 's', 'l'];
 late String pieceType;
 
@@ -86,6 +87,13 @@ void main() {
   Keyboard.echoUnhandledKeys = false;
   Console.hideCursor();
 
+  pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
+
+  emptyLine = {};
+  for (int i = 0; i < gridSizeX; i++) {
+    emptyLine[i] = 0;
+  }
+
   gravityEvent = Timer.periodic(
     Duration(milliseconds: softDropInterval),
     (timer) => gravity(),
@@ -94,8 +102,6 @@ void main() {
   Keyboard.bindKeys(controls).listen((key) {
     handleInput(key);
   });
-
-  pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
 }
 
 Map deepCloneMap(Map map) {
@@ -243,18 +249,7 @@ void gravity() {
     if (isPieceColliding(pieceType, pieceRotation, pieceX, pieceY + 1)) {
       if (framesSincePieceLanded == landingFrames) {
         framesSincePieceLanded = 0;
-
-        final piecePositions = tetrominos[pieceType]![pieceRotation];
-
-        for (var position in piecePositions) {
-          grid[position.last + pieceY]![position.first + pieceX] = pieceType;
-        }
-
-        pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
-
-        pieceY = -2;
-        pieceX = 4;
-        pieceRotation = 0;
+        placePiece(pieceY);
       } else if (frame % gravityFrames == 0) {
         framesSincePieceLanded++;
       }
@@ -281,6 +276,42 @@ void gameOver() {
   exit(0);
 }
 
+void placePiece(y) {
+  final piecePositions = tetrominos[pieceType]![pieceRotation];
+
+  for (var position in piecePositions) {
+    grid[position.last + y]![position.first + pieceX] = pieceType;
+  }
+
+  pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
+
+  pieceY = -2;
+  pieceX = 4;
+  pieceRotation = 0;
+
+  clearLines();
+}
+
+void clearLines() {
+  score++;
+  for (int y = 0; y < gridSizeY; y++) {
+    var line = grid[y];
+
+    bool isLineHollow = false; // (hollow as in not full)
+
+    for (int x = 0; x < gridSizeX; x++) {
+      if (line![x] == 0) {
+        isLineHollow = true;
+        break;
+      }
+    }
+
+    if (!isLineHollow) {
+      grid[y] = emptyLine;
+    }
+  }
+}
+
 void handleInput(String key) {
   int numberOfPieceRotations = tetrominos[pieceType]!.length;
 
@@ -305,7 +336,12 @@ void handleInput(String key) {
   } else if (key == 'down' || key == 's') {
     isSoftDropping = true;
   } else if (key == ' ') {
-    // hard drop
+    for (int nextPieceY = pieceY; nextPieceY < gridSizeY; nextPieceY++) {
+      if (isPieceColliding(pieceType, pieceRotation, pieceX, nextPieceY + 1)) {
+        placePiece(nextPieceY);
+        break;
+      }
+    }
   } else if (key == '') {
     gravityEvent.cancel();
 
