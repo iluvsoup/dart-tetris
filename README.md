@@ -5,6 +5,7 @@ A small project I made in response to my sudden obsession with command line game
 
 # TODO
 - Stop soft dropping when piece lands
+- Fix annoying problem in which you stop soft dropping for a single frame because of how holding down keys works in the package I use
 - Maybe switch to another package that has better keyboard support
 
 ## Requirements

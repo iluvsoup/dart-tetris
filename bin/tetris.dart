@@ -63,6 +63,9 @@ late String pieceType;
 
 bool isSoftDropping = false;
 
+int landingFrames = 1; // amount of frames that pass after touching the ground before piece officially lands
+int framesSincePieceLanded = 0;
+
 late Timer gravityEvent;
 
 Map canvas = {};
@@ -250,23 +253,29 @@ void clear() {
 
 void gravity() {
   if (isSoftDropping || (!isSoftDropping && frame % gravityFrames == 0)) {
-    pieceY++;
-    draw();
-
     if (isPieceColliding(pieceType, pieceRotation, pieceX, pieceY + 1)) {
-      // place piece
-      final piecePositions = tetrominos[pieceType]![pieceRotation];
+      if (framesSincePieceLanded == landingFrames) {
+        framesSincePieceLanded = 0;
 
-      for (var position in piecePositions) {
-        grid[position.last + pieceY]![position.first + pieceX] = pieceType;
+        final piecePositions = tetrominos[pieceType]![pieceRotation];
+
+        for (var position in piecePositions) {
+          grid[position.last + pieceY]![position.first + pieceX] = pieceType;
+        }
+
+        pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
+
+        pieceY = -2;
+        pieceX = 4;
+        pieceRotation = 0;
+      } else if (frame % gravityFrames == 0) {
+        framesSincePieceLanded++;
       }
-
-      pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
-
-      pieceY = -2;
-      pieceX = 4;
-      pieceRotation = 0;
+    } else {
+      pieceY++;
     }
+
+    draw();
 
     if (frame % gravityFrames == 0) {
       isSoftDropping = false;
