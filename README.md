@@ -3,6 +3,10 @@
 # Command line Tetris in Dart
 A small project I made in response to my sudden obsession with command line games
 
+# TODO
+- Stop soft dropping when piece lands
+- Maybe switch to another package that has better keyboard support
+
 ## Requirements
 Dart
 
