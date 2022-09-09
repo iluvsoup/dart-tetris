@@ -97,8 +97,6 @@ void main() {
   Keyboard.echoUnhandledKeys = false;
   Console.hideCursor();
 
-  draw();
-
   gravityEvent = Timer.periodic(
     Duration(milliseconds: softDropInterval),
     (timer) => gravity(),
@@ -273,13 +271,23 @@ void handleInput(String key) {
   int numberOfPieceRotations = tetrominos[pieceType]!.length;
 
   if (key == 'left' || key == 'a') {
-    pieceX--;
+    if (!isPieceColliding(pieceType, pieceRotation, pieceX - 1, pieceY)) {
+      pieceX--;
+    }
   } else if (key == 'right' || key == 'd') {
-    pieceX++;
+    if (!isPieceColliding(pieceType, pieceRotation, pieceX + 1, pieceY)) {
+      pieceX++;
+    }
   } else if (key == 'up' || key == 'w') {
-    pieceRotation = (pieceRotation + 1) % numberOfPieceRotations;
+    int nextRotation = (pieceRotation + 1) % numberOfPieceRotations;
+    if (!isPieceColliding(pieceType, nextRotation, pieceX, pieceY)) {
+      pieceRotation = nextRotation;
+    }
   } else if (key == 'z') {
-    pieceRotation = (pieceRotation - 1) % numberOfPieceRotations;
+    int nextRotation = (pieceRotation - 1) % numberOfPieceRotations;
+    if (!isPieceColliding(pieceType, nextRotation, pieceX, pieceY)) {
+      pieceRotation = nextRotation;
+    }
   } else if (key == 'down' || key == 's') {
     isSoftDropping = true;
   } else if (key == ' ') {
