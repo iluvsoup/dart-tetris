@@ -255,6 +255,7 @@ void gravity() {
       }
     } else {
       pieceY++;
+      framesSincePieceLanded = 0;
     }
 
     draw();
