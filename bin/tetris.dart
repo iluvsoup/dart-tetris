@@ -327,21 +327,26 @@ void clearLines() {
     // scoring
     // you could implement levels and make this more sophisticated
     // but I wan't it to be endless
-    if (numberOfClearedLines == 1) {
-      score += 40;
-    } else if (numberOfClearedLines == 2) {
-      score += 100;
-    } else if (numberOfClearedLines == 3) {
-      score += 300;
-    } else if (numberOfClearedLines == 4) {
-      score += 1200;
-    } else {
-      gravityEvent.cancel();
+    switch (numberOfClearedLines) {
+      case 1:
+        score += 40;
+        break;
+      case 2:
+        score += 100;
+        break;
+      case 3:
+        score += 300;
+        break;
+      case 4:
+        score += 1200;
+        break;
+      default:
+        gravityEvent.cancel();
 
-      Console.showCursor();
-      print('How the fuck did you get here');
+        Console.showCursor();
+        print('How the fuck did you get here');
 
-      exit(0);
+        exit(0);
     }
   }
 }
