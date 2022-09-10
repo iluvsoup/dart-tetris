@@ -34,7 +34,7 @@ const double gravityFrames = (gravityInterval / softDropInterval);
 
 int frame = 0;
 
-Map<int, Map<int, dynamic>> grid = generateGrid();
+late Map<int, Map<int, dynamic>> grid;
 
 int score = 0;
 
@@ -85,7 +85,11 @@ void main() {
   Keyboard.echoUnhandledKeys = false;
   Console.hideCursor();
 
+  grid = generateGrid();
+
   pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
+
+  draw();
 
   gravityEvent = Timer.periodic(
     Duration(milliseconds: softDropInterval),
@@ -288,6 +292,7 @@ void placePiece(y) {
 
 void clearLines() {
   int numberOfClearedLines = 0;
+  int clearedLinesY = 0; // the y coordinate at which the cleared lines start (bottom up)
 
   // first pass: clear the lines
   for (int y = 0; y < gridSizeY; y++) {
@@ -302,6 +307,8 @@ void clearLines() {
 
     if (!isLineHollow) {
       numberOfClearedLines++;
+      clearedLinesY = max(clearedLinesY, y);
+
       for (int x = 0; x < gridSizeX; x++) {
         grid[y]![x] = 0;
       }
@@ -310,7 +317,7 @@ void clearLines() {
 
   // second pass: move remaining lines downward
   if (numberOfClearedLines > 0) {
-    for (int y = gridSizeY - 1 - numberOfClearedLines; y >= 0; y--) {
+    for (int y = clearedLinesY - numberOfClearedLines; y >= 0; y--) {
       grid[y + numberOfClearedLines] = grid[y]!;
     }
 
