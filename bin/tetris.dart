@@ -136,7 +136,6 @@ bool isPieceColliding(String type, int rotation, int x, int y) {
     int realY = position.last + y;
 
     if (realX < 0 || realX >= gridSizeX || realY >= gridSizeY) return true;
-
     if (grid[realY] != null && grid[realY]![realX] != 0) return true;
   }
 
@@ -154,7 +153,9 @@ void draw() {
   for (int previewY = pieceY; previewY < gridSizeY; previewY++) {
     if (isPieceColliding(pieceType, pieceRotation, pieceX, previewY + 1)) {
       for (var position in piecePositions) {
-        canvas[position.last + previewY]![position.first + pieceX] = 1;
+        if (position.last + previewY >= 0) {
+          canvas[position.last + previewY]![position.first + pieceX] = 1;
+        }
       }
 
       break;
@@ -278,6 +279,8 @@ void placePiece(y) {
   final piecePositions = tetrominos[pieceType]![pieceRotation];
 
   for (var position in piecePositions) {
+    if (position.last + y < 0) gameOver();
+
     grid[position.last + y]![position.first + pieceX] = pieceType;
   }
 
