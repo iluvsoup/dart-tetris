@@ -312,6 +312,22 @@ void clearLines() {
   for (int y = gridSizeY - 1 - numberOfClearedLines; y >= 0; y--) {
     grid[y + numberOfClearedLines] = grid[y]!;
   }
+
+  // scoring
+  // you could implement levels and make this more sophisticated
+  // but I wan't it to be endless
+  if (numberOfClearedLines == 1) {
+    score += 40;
+  } else if (numberOfClearedLines == 2) {
+    score += 100;
+  } else if (numberOfClearedLines == 3) {
+    score += 300;
+  } else if (numberOfClearedLines == 4) {
+    score += 1200;
+  } else {
+    print('How the fuck did you get here');
+    exit(0);
+  }
 }
 
 void handleInput(String key) {
