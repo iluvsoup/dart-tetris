@@ -292,25 +292,7 @@ void placePiece(y) {
   clearLines();
 }
 
-void clearLines() {
-  score++;
-  for (int y = 0; y < gridSizeY; y++) {
-    var line = grid[y];
-
-    bool isLineHollow = false; // (hollow as in not full)
-
-    for (int x = 0; x < gridSizeX; x++) {
-      if (line![x] == 0) {
-        isLineHollow = true;
-        break;
-      }
-    }
-
-    if (!isLineHollow) {
-      grid[y] = emptyLine;
-    }
-  }
-}
+void clearLines() {}
 
 void handleInput(String key) {
   int numberOfPieceRotations = tetrominos[pieceType]!.length;
