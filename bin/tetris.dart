@@ -333,8 +333,11 @@ void clearLines() {
     } else if (numberOfClearedLines == 4) {
       score += 1200;
     } else {
-      print('How the fuck did you get here');
+      gravityEvent.cancel();
+
       Console.showCursor();
+      print('How the fuck did you get here');
+
       exit(0);
     }
   }
