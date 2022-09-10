@@ -49,7 +49,7 @@ late String pieceType;
 
 bool isSoftDropping = false;
 
-int landingFrames = 1; // amount of frames that pass after touching the ground before piece officially lands
+int landingFrames = 1; // grace period after landing in frames
 int framesSincePieceLanded = 0;
 
 late Timer gravityEvent;
@@ -309,6 +309,9 @@ void clearLines() {
   }
 
   // second pass: move remaining lines downward
+  for (int y = gridSizeY - 1 - numberOfClearedLines; y >= 0; y--) {
+    grid[y + numberOfClearedLines] = grid[y]!;
+  }
 }
 
 void handleInput(String key) {
