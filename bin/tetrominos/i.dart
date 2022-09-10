@@ -1,5 +1,5 @@
 class ITetromino {
-  final rotations = [
+  static const rotations = [
     [
       [-1, 0],
       [0, 0],

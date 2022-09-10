@@ -1,5 +1,5 @@
 class ZTetromino {
-  final rotations = [
+  static const rotations = [
     [
       [-1, -1],
       [0, -1],

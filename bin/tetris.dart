@@ -4,22 +4,16 @@ import 'dart:math';
 
 import 'package:console/console.dart';
 
-import 'tetrominos/i.dart';
-import 'tetrominos/j.dart';
-import 'tetrominos/l.dart';
-import 'tetrominos/o.dart';
-import 'tetrominos/s.dart';
-import 'tetrominos/t.dart';
-import 'tetrominos/z.dart';
+import 'tetrominos/tetrominos.dart';
 
 final tetrominos = <String, List<List<List<int>>>>{
-  'i': ITetromino().rotations,
-  'o': OTetromino().rotations,
-  't': TTetromino().rotations,
-  'z': ZTetromino().rotations,
-  'j': JTetromino().rotations,
-  's': STetromino().rotations,
-  'l': LTetromino().rotations,
+  'i': ITetromino.rotations,
+  'o': OTetromino.rotations,
+  't': TTetromino.rotations,
+  'z': ZTetromino.rotations,
+  'j': JTetromino.rotations,
+  's': STetromino.rotations,
+  'l': LTetromino.rotations,
 };
 
 const int gridSizeX = 10;
@@ -32,29 +26,7 @@ const int softDropInterval = 50;
 
 const double gravityFrames = (gravityInterval / softDropInterval);
 
-int frame = 0;
-
-late Map<int, Map<int, dynamic>> grid;
-
-int score = 0;
-
-int pieceX = 4;
-int pieceY = -2;
-int pieceRotation = 0;
-
-Random rng = Random();
-
-List<String> pieceTypes = ['i', 'o', 't', 'z', 'j', 's', 'l'];
-late String pieceType;
-
-bool isSoftDropping = false;
-
-int landingFrames = 1; // grace period after landing in frames
-int framesSincePieceLanded = 0;
-
-late Timer gravityEvent;
-
-Map canvas = {};
+const controls = ['up', 'down', 'left', 'right', 'z', 'w', 'a', 's', 'd', ' ', ''];
 
 const colors = <String, Color>{
   'i': Color.LIGHT_CYAN,
@@ -76,7 +48,29 @@ const unicodeCharacters = <String, String>{
   'l': '🟧',
 };
 
-const controls = ['up', 'down', 'left', 'right', 'z', 'w', 'a', 's', 'd', ' ', ''];
+int frame = 0;
+
+Map<int, Map<int, dynamic>> grid = generateGrid();
+
+int score = 0;
+
+int pieceX = 4;
+int pieceY = -2;
+int pieceRotation = 0;
+
+Random rng = Random();
+
+List<String> pieceTypes = ['i', 'o', 't', 'z', 'j', 's', 'l'];
+late String pieceType;
+
+bool isSoftDropping = false;
+
+int landingFrames = 1; // grace period after landing in frames
+int framesSincePieceLanded = 0;
+
+late Timer gravityEvent;
+
+Map canvas = {};
 
 void main() {
   Console.init();
