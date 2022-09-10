@@ -44,8 +44,6 @@ int pieceRotation = 0;
 
 Random rng = Random();
 
-late Map<int, dynamic> emptyLine;
-
 List<String> pieceTypes = ['i', 'o', 't', 'z', 'j', 's', 'l'];
 late String pieceType;
 
@@ -88,11 +86,6 @@ void main() {
   Console.hideCursor();
 
   pieceType = pieceTypes.elementAt(rng.nextInt(pieceTypes.length));
-
-  emptyLine = {};
-  for (int i = 0; i < gridSizeX; i++) {
-    emptyLine[i] = 0;
-  }
 
   gravityEvent = Timer.periodic(
     Duration(milliseconds: softDropInterval),
@@ -293,7 +286,30 @@ void placePiece(y) {
   clearLines();
 }
 
-void clearLines() {}
+void clearLines() {
+  int numberOfClearedLines = 0;
+
+  // first pass: clear the lines
+  for (int y = 0; y < gridSizeY; y++) {
+    bool isLineHollow = false;
+
+    for (int x = 0; x < gridSizeX; x++) {
+      if (grid[y]![x] == 0) {
+        isLineHollow = true;
+        break;
+      }
+    }
+
+    if (!isLineHollow) {
+      numberOfClearedLines++;
+      for (int x = 0; x < gridSizeX; x++) {
+        grid[y]![x] = 0;
+      }
+    }
+  }
+
+  // second pass: move remaining lines downward
+}
 
 void handleInput(String key) {
   int numberOfPieceRotations = tetrominos[pieceType]!.length;
