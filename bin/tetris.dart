@@ -334,6 +334,7 @@ void clearLines() {
       score += 1200;
     } else {
       print('How the fuck did you get here');
+      Console.showCursor();
       exit(0);
     }
   }
