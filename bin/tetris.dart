@@ -315,7 +315,10 @@ void clearLines() {
   // second pass: move remaining lines downward
   if (numberOfClearedLines > 0) {
     for (int y = clearedLinesY - numberOfClearedLines; y >= 0; y--) {
-      grid[y + numberOfClearedLines] = grid[y]!;
+      for (int x = 0; x < gridSizeX; x++) {
+        grid[y + numberOfClearedLines]![x] = grid[y]![x];
+      }
+      // grid[y + numberOfClearedLines] = grid[y]!;
     }
 
     // scoring
